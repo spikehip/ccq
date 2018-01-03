@@ -14,6 +14,7 @@ server.get('/api/:key', function(req, res, next) {
     if ( found != null && found.length > 0 ) {
       var obj = {};
       obj[req.params.key] = found[1];
+      res.header("Access-Control-Allow-Origin", "*");
       res.send(obj);
     }
     else { 
