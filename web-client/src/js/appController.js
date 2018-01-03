@@ -5,15 +5,30 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge'],
+define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'DbiConverter'],
   function(oj, ko, $) {
      function ControllerViewModel() {
+       var apiEndpoint = "https://ccq.bikeonet.hu";
        var self = this;
        self.ccq  = ko.observable();
        self.thresholdValues = [{max: 33}, {max: 90}, {}];
 
+       this.customMetricLabel = {rendered:'on',textType: 'percent',
+                                  style:{fontWeight:'bold',color:'black'}};
+
+       oj.Validation.converterFactory('dbiConverter', DbiConverterFactory);
+       var converterFactory = oj.Validation.converterFactory("dbiConverter");
+
+       this.dbiConverter = {rendered:'on',
+        converter: converterFactory.createConverter({})};
+
+
        self.signal  = ko.observable();
-       self.thresholdValuesSignal = [{max: 67}, {max: 82}, {}];
+       self.signalLabel = ko.observable();
+       self.thresholdValuesSignal = [{max: 33}, {max: 66}, {}];
+
+       self.tx = ko.observable();
+       self.rx = ko.observable();
 
       // Media queries for repsonsive layouts
       var smQuery = oj.ResponsiveUtils.getFrameworkQuery(oj.ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
@@ -22,18 +37,32 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge'],
       // Header
       // Application Name used in Branding Area
 
-	$.getJSON("https://ccq.bikeonet.hu/api/ccq").
+	$.getJSON(apiEndpoint+"/api/ccq").
               then(function (data) {
 		  console.log(data);
 		  self.ccq(data.ccq / 10);
               });
 
 
-	$.getJSON("https://ccq.bikeonet.hu/api/signal").
+	$.getJSON(apiEndpoint+"/api/signal").
+              then(function (data) {
+      console.log(data);
+      self.signalLabel(data.signal);
+		  self.signal(100 - (data.signal * -1));
+              });
+
+  $.getJSON(apiEndpoint+"/api/tx_rate").
               then(function (data) {
 		  console.log(data);
-		  self.signal(data.signal * -1);
+		  self.tx(parseInt(data.tx_rate));
               });
+
+  $.getJSON(apiEndpoint+"/api/rx_rate").
+              then(function (data) {
+  	  console.log(data);
+  	  self.rx(parseInt(data.rx_rate));
+              });
+
 
       self.appName = ko.observable("CCQ Web Client");
       // User Info used in Global Navigation area
