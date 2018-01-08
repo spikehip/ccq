@@ -6,8 +6,7 @@ before_script:
   - npm -g install @oracle/ojet-cli
 script:
   - docker build -t spikehip/airos-4-rest api
-  - docker run -p 8080:8080 -d spikehip/airos-4-rest:latest
-  - curl -si http://localhost:8080/api/ccq | grep 404
+  - docker run -p 8080:8080 -d spikehip/airos-4-rest:latest && curl -si http://localhost:8080/api/ccq | grep 404
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
