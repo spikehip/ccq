@@ -6,11 +6,7 @@ before_script:
   - npm -g install @oracle/ojet-cli
 script:
   - docker build -t spikehip/airos-4-rest api
-  - cd web-client && npm install && ojet build web --release && cd ..
-  - docker build -t spikehip/airos-4-web-client web-client
-  - docker run -p 10080:80 -d spikehip/airos-4-web-client:latest
   - docker run -p 8080:8080 -d spikehip/airos-4-rest:latest
-  - curl http://localhost:10080/ | grep CCQ
   - curl -si http://localhost:8080/api/ccq | grep 404
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
