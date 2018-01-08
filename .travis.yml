@@ -1,0 +1,10 @@
+sudo: required
+services:
+  - docker
+script:
+  - docker build -t spikehip/airos-4-rest .
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push spikehip/airos-4-rest;
+    fi
