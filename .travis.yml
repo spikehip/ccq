@@ -1,10 +1,21 @@
+language: node_js
+node_js:
+  - "8"
 sudo: required
 services:
   - docker
+before_script:
+  - npm -g install @oracle/ojet-cli
 script:
-  - docker build -t spikehip/airos-4-rest .
+  - docker build -t spikehip/airos-4-rest api
+  - cd web-client
+  - npm install
+  - ojet build web --release
+  - cd ..
+  - docker build -t spikehip/airos-4-client web-client
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push spikehip/airos-4-rest;
+    docker push spikehip/airos-4-client;
     fi
