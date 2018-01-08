@@ -17,5 +17,5 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push spikehip/airos-4-rest;
-    docker push spikehip/airos-4-web-client;
+    docker push spikehip/airos-4-client;
     fi
