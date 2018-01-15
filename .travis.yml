@@ -20,5 +20,5 @@ after_success:
     docker push spikehip/airos-4-client;
     docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST dockercloud/client -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $SWARM;
     export DOCKER_HOST=tcp://127.0.0.1:32768;
-    docker run -p 80:80 --name ccq-client -d spikehip/airos-4-client;
+    docker service update --force $DOCKER_SERVICE;
     fi
