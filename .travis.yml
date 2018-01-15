@@ -7,13 +7,13 @@ services:
 before_script:
   - npm -g install @oracle/ojet-cli
 script:
-  - docker build -t spikehip/airos-4-rest api
+  - docker build -t spikehip/airos-4-rest:$TRAVIS_BUILD_NUMBER api
   - cd web-client
   - npm install
   - ojet build web --release
   - sed -i "s/__BUILD_VERSION__/$TRAVIS_COMMIT/" web/index.html
   - cd ..
-  - docker build -t spikehip/airos-4-client web-client
+  - docker build -t spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER web-client
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
@@ -21,5 +21,5 @@ after_success:
     docker push spikehip/airos-4-client;
     docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST dockercloud/client -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $SWARM;
     export DOCKER_HOST=tcp://127.0.0.1:32768;
-    docker service update --force $DOCKER_SERVICE;
+    docker service update --force --image spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER $DOCKER_SERVICE;
     fi
