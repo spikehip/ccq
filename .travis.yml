@@ -11,6 +11,7 @@ script:
   - cd web-client
   - npm install
   - ojet build web --release
+  - sed -i "s/__BUILD_VERSION__/$TRAVIS_COMMIT/" web/index.html
   - cd ..
   - docker build -t spikehip/airos-4-client web-client
 after_success:
