@@ -5,7 +5,7 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'DbiConverter'],
+define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'ojs/ojchart', 'DbiConverter'],
   function(oj, ko, $) {
      function ControllerViewModel() {
        var apiEndpoint = "https://ccq.bikeonet.hu";
@@ -30,6 +30,17 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'Db
        self.tx = ko.observable();
        self.rx = ko.observable();
 
+       self.stackValue = ko.observable('off');
+       self.orientationValue = ko.observable('vertical');
+
+       /* chart data */
+       var areaSeries = [{name : "CCQ", items : [0,0,0,0,0,0,0,0,0,0]},
+                         {name : "Signal", items : [0,0,0,0,0,0,0,0,0,0]}];
+
+       var areaGroups = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+       this.areaSeriesValue = ko.observableArray(areaSeries);
+       this.areaGroupsValue = ko.observableArray(areaGroups);
+
       // Media queries for repsonsive layouts
       var smQuery = oj.ResponsiveUtils.getFrameworkQuery(oj.ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
       self.smScreen = oj.ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
@@ -50,7 +61,10 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'Db
                     then(function (data) {
       		  console.log(data);
       		  self.ccq(data.ccq / 10);
-                    });
+            var timeslot = new Date().getMinutes() % 10;
+            areaSeries[0].items[timeslot] = self.ccq();
+            self.areaSeriesValue(areaSeries);
+        });
 
 
       	$.getJSON(apiEndpoint+"/api/signal").
@@ -58,7 +72,10 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojgauge', 'Db
             console.log(data);
             self.signalLabel(data.signal);
       		  self.signal(100 - (data.signal * -1));
-                    });
+            var timeslot = new Date().getMinutes() % 10;
+            areaSeries[1].items[timeslot] = self.signal();
+            self.areaSeriesValue(areaSeries);
+        });
 
         $.getJSON(apiEndpoint+"/api/tx_rate").
                     then(function (data) {

@@ -151,6 +151,22 @@
           </div>
         </div>
 
+        <div id='chart-container' class='oj-flex oj-flex-items-pad'>
+          <div class='oj-flex-item' style="">
+            <oj-chart id="lineAreaChart"
+                type="lineWithArea"
+                series="[[areaSeriesValue]]"
+                groups="[[areaGroupsValue]]"
+                animation-on-display="auto"
+                animation-on-data-change="auto"
+                orientation="[[orientationValue]]"
+                stack="[[stackValue]]"
+                hover-behavior="dim"
+                style="width:100%;height:350px;">
+            </oj-chart>
+          </div>
+        </div>
+
 	</div>
       </div>
       <footer class="oj-web-applayout-footer" role="contentinfo">
