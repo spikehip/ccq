@@ -1,35 +1,32 @@
 language: node_js
 node_js:
-  - "8"
+- '8'
 sudo: required
 services:
-  - docker
+- docker
 before_script:
-  - npm -g install @oracle/ojet-cli
+- npm -g install @oracle/ojet-cli
 script:
-  - docker build -t spikehip/airos-4-rest:$TRAVIS_BUILD_NUMBER api
-  - cd web-client
-  - npm install
-  - ojet build web --release
-  - sed -i "s/__BUILD_VERSION__/$TRAVIS_COMMIT/" web/index.html
-  - cd ..
-  - docker build -t spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER web-client
+- docker build -t spikehip/airos-4-rest:$TRAVIS_BUILD_NUMBER api
+- cd web-client
+- npm install
+- ojet build web --release
+- sed -i "s/__BUILD_VERSION__/$TRAVIS_COMMIT/" web/index.html
+- cd ..
+- docker build -t spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER web-client
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push spikehip/airos-4-rest;
-    docker push spikehip/airos-4-client;
-    docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST dockercloud/client -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $SWARM;
-    export DOCKER_HOST=tcp://127.0.0.1:32768;
-    docker service update --force --image spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER $DOCKER_SERVICE;
-    fi
+- if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u "$DOCKER_USERNAME" -p
+  "$DOCKER_PASSWORD"; docker push spikehip/airos-4-rest; docker push spikehip/airos-4-client;
+  docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock -e DOCKER_HOST
+  dockercloud/client -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $SWARM; export DOCKER_HOST=tcp://127.0.0.1:32768;
+  docker service update --force --image spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER
+  $DOCKER_SERVICE; fi
 before_deploy:
-  - tar -cvzf web-client-stable.tar.gz -C web-client/web/ .
+- tar -cvzf web-client-stable.tar.gz -C web-client/web/ .
 deploy:
   provider: releases
-  user: "spikehip"
-  password: $GITHUB_PASSWORD
-  file: "web-client-stable.tar.gz" 
-  skip_cleanup: true
+  api_key:
+    secure: V/u9hdX5x6sMQ33pqVKPHW1HFQAekzy2RzEH+ntVHEn0ux/dZwuELK8lT4z2/ASrdF7GNBvet6Zv94nIwUZ5OpeD0zt/LBP7temo3VmMzPyR2vZbTIevW3kgZerK53vIMj/OCyIasa8ugO8bf6a+UsODNVfsaPKudH4ggzFD42lZdxprebYsM2fJZ1mtbzgEAYnv3jz64mIgdj+jtSONLpVk2jKYGejBkThaduEpmnMiRaYtW6KEZkTODjysy/XStSguJY229zt11HUIpsJYEh+03D8n7/Nsf6h/6lZ3pNQDiozQEkzN/VVzro9E10l1w4R6Xlmaks/0I6/t+p/M8u4F2Qu4QItXWgxAHKE77/xm+xZuNRLkWmCQHPt9ye6vZpu7Xi46xvZ/EzS0ffye1vfubH6+dT1GwWGnNvJnylSSgFnnbWygKCaGwH/fjKDs0PcZhRLs8azaNDD1qw5RuJwG/L886w9QQtIoqOV4xwPYzp/E60AYPgKJd3DbquRK4ooo8A5r3qLE0Hw6MRdexW640sxfVi0U/9Yp8NFKS5wyfzU5pDbnf1ftXD16r4qvLEPBdI8i5fRf/rege806gTefkgbohaPPVTrUp0zZ3p+hLq8nBTB8+/jFbLfI6u4/QbWluK/w1Rec5+IKuIFRqCq+pFunsEpQvAHMnzUFfw8=
+  file: web-client-stable.tar.gz
   on:
     tags: true
