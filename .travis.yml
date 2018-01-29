@@ -23,3 +23,13 @@ after_success:
     export DOCKER_HOST=tcp://127.0.0.1:32768;
     docker service update --force --image spikehip/airos-4-client:$TRAVIS_BUILD_NUMBER $DOCKER_SERVICE;
     fi
+before_deploy:
+  - tar -cvzf web-client-stable.tar.gz -C web-client/web/ .
+deploy:
+  provider: releases
+  user: "spikehip"
+  password: $GITHUB_PASSWORD
+  file: "web-client-stable.tar.gz" 
+  skip_cleanup: true
+  on:
+    tags: true
