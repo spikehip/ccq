@@ -28,5 +28,6 @@ deploy:
   api_key:
     secure: V/u9hdX5x6sMQ33pqVKPHW1HFQAekzy2RzEH+ntVHEn0ux/dZwuELK8lT4z2/ASrdF7GNBvet6Zv94nIwUZ5OpeD0zt/LBP7temo3VmMzPyR2vZbTIevW3kgZerK53vIMj/OCyIasa8ugO8bf6a+UsODNVfsaPKudH4ggzFD42lZdxprebYsM2fJZ1mtbzgEAYnv3jz64mIgdj+jtSONLpVk2jKYGejBkThaduEpmnMiRaYtW6KEZkTODjysy/XStSguJY229zt11HUIpsJYEh+03D8n7/Nsf6h/6lZ3pNQDiozQEkzN/VVzro9E10l1w4R6Xlmaks/0I6/t+p/M8u4F2Qu4QItXWgxAHKE77/xm+xZuNRLkWmCQHPt9ye6vZpu7Xi46xvZ/EzS0ffye1vfubH6+dT1GwWGnNvJnylSSgFnnbWygKCaGwH/fjKDs0PcZhRLs8azaNDD1qw5RuJwG/L886w9QQtIoqOV4xwPYzp/E60AYPgKJd3DbquRK4ooo8A5r3qLE0Hw6MRdexW640sxfVi0U/9Yp8NFKS5wyfzU5pDbnf1ftXD16r4qvLEPBdI8i5fRf/rege806gTefkgbohaPPVTrUp0zZ3p+hLq8nBTB8+/jFbLfI6u4/QbWluK/w1Rec5+IKuIFRqCq+pFunsEpQvAHMnzUFfw8=
   file: web-client-stable.tar.gz
+  skip_cleanup: true
   on:
     tags: true
