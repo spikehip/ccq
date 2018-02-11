@@ -19,7 +19,7 @@ if ( ubnt_host === undefined ) {
 var server = restify.createServer();
 server.get('/api/:key', function(req, res, next) {
   if ( /^[a-z_]+$/.test(req.params.key) ) {
-    status=shell.exec('sshpass -p "'+ubnt_pass+'" ssh '+ubnt_user+'@'+ubnt_host+' /usr/www/status.cgi | grep '+req.params.key+'=');
+    status=shell.exec('sshpass -p "'+ubnt_pass+'" ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '+ubnt_user+'@'+ubnt_host+' /usr/www/status.cgi | grep '+req.params.key+'=');
     if (status.stdout.length == 0) {
       return next(new errs.NotFoundError('not here!'));
     }
