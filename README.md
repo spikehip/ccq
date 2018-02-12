@@ -41,4 +41,5 @@ docker run --rm -p 10080:80 -ti spikehip/airos-4-client:28
 
 # web client 
 
-!(screenshot of client)[https://raw.githubusercontent.com/spikehip/ccq/feature/swarm-down/screen1.png]
+!(screenshot of client)
+[https://raw.githubusercontent.com/spikehip/ccq/feature/swarm-down/screen1.png]
