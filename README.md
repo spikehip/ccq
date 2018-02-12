@@ -39,3 +39,6 @@ docker run --rm -p 10080:80 -ti spikehip/airos-4-client:28
 
 [..]
 
+# web client 
+
+!(screenshot of client)[screen1.png]
